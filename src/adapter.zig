@@ -186,7 +186,7 @@ pub const Adapter = opaque{
 
     // This is a synchronous wrapper that handles asynchronous (callback) logic.
     // It uses polling to see when the request has been fulfilled, so needs a polling interval parameter.
-    pub fn requestDeviceSync(self: *Adapter, instance: *Instance, descriptor: ?*const DeviceDescriptor, polling_interval_nanoseconds: u64) RequestDeviceResponse {
+    pub fn requestDeviceSync(self: *Adapter, instance: *Instance, descriptor: ?*const DeviceDescriptor, io: std.Io, polling_interval: std.Io.Duration) RequestDeviceResponse {
         var response: RequestDeviceResponse = undefined;
         var completed = false;
         const callback_info = RequestDeviceCallbackInfo {
@@ -201,7 +201,7 @@ pub const Adapter = opaque{
         _ = device_future;
         instance.processEvents();
         while(!completed) {
-            std.Thread.sleep(polling_interval_nanoseconds);
+            io.sleep(polling_interval, std.Io.Clock.cpu_thread) catch {}; // is this the correct clock?
             instance.processEvents();
         }
 
@@ -223,12 +223,12 @@ test "can request device" {
     const testing = @import("std").testing;
 
     const instance = Instance.create(null);
-    const adapter_response = instance.?.requestAdapterSync(null, 200_000_000);
+    const adapter_response = instance.?.requestAdapterSync(null, testing.io, std.Io.Duration.fromMilliseconds(200));
     const adapter: ?*Adapter = switch(adapter_response.status) {
         .success => adapter_response.adapter,
         else => null,
     };
-    const device_response = adapter.?.requestDeviceSync(instance.?, null, 200_000_000);
+    const device_response = adapter.?.requestDeviceSync(instance.?, null, testing.io, std.Io.Duration.fromMilliseconds(200));
     const device: ?*Device = switch(device_response.status) {
         .success => device_response.device,
         else => null

@@ -259,7 +259,7 @@ pub const Instance = opaque {
 
     // This is a synchronous wrapper that handles asynchronous (callback) logic.
     // It uses polling to see when the request has been fulfilled, so needs a polling interval parameter.
-    pub fn requestAdapterSync(self: *Instance, options: ?*const RequestAdapterOptions, polling_interval_nanoseconds: u64) RequestAdapterResponse {
+    pub fn requestAdapterSync(self: *Instance, options: ?*const RequestAdapterOptions, io: std.Io, polling_interval: std.Io.Duration) RequestAdapterResponse {
         var response: RequestAdapterResponse = undefined;
         var completed = false;
         const callback_info = RequestAdapterCallbackInfo {
@@ -274,7 +274,7 @@ pub const Instance = opaque {
         _ = adapter_future;
         self.processEvents();
         while (!completed) {
-            std.Thread.sleep(polling_interval_nanoseconds);
+            io.sleep(polling_interval, std.Io.Clock.cpu_thread) catch {}; // is this the correct clock?
             self.processEvents();
         }
 
@@ -322,7 +322,7 @@ test "can request adapter" {
     const testing = @import("std").testing;
 
     const instance = Instance.create(null);
-    const response = instance.?.requestAdapterSync(null, 200_000_000);
+    const response = instance.?.requestAdapterSync(null, testing.io, std.Io.Duration.fromMilliseconds(200));
     const adapter: ?*Adapter = switch(response.status) {
         .success => response.adapter,
         else => null,
