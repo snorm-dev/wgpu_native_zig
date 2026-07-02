@@ -1,6 +1,8 @@
 # wgpu_native_zig
 Zig bindings for [wgpu-native](https://github.com/gfx-rs/wgpu-native)
 
+> NOTE: Release versions have been reset as compared to the [upstream](https://github.com/bronter/wgpu_native_zig).
+
 This package exposes two modules: `wgpu-c` and `wgpu`.
 
 `wgpu-c` is just `wgpu.h` (and by extension `webgpu.h`) run through `translate-c`, so as close to wgpu-native's original C API as is possible in Zig.
@@ -10,7 +12,7 @@ This package exposes two modules: `wgpu-c` and `wgpu`.
 ## Adding this package to your build
 Add the package to your dependencies, either with:
 ```sh
-zig fetch --save https://github.com/bronter/wgpu_native_zig/archive/refs/tags/v6.5.0.tar.gz
+zig fetch --save git+https://github.com/snorm-dev/wgpu_native_zig
 ```
 or by manually adding to your `build.zig.zon`:
 ```zig
@@ -20,9 +22,9 @@ or by manually adding to your `build.zig.zon`:
         // ...other dependencies
         .wgpu_native_zig = .{
             // You can either use a commit hash:
-            .url="https://github.com/bronter/wgpu_native_zig/archive/<commit_hash>.tar.gz",
+            .url="https://github.com/snorm-dev/wgpu_native_zig/archive/<commit_hash>.tar.gz",
             // or a tagged release:
-            // .url = "https://github.com/bronter/wgpu_native_zig/archive/refs/tags/v6.5.0.tar.gz`
+            // .url = "https://github.com/snorm-dev/wgpu_native_zig/archive/refs/tags/<release_name>.tar.gz`
             .hash="<dependency hash>"
         }
     }
