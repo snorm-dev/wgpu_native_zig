@@ -48,7 +48,7 @@ pub const Limits = extern struct {
 };
 
 pub const WGPUNativeLimits = extern struct {
-    chain: ChainedStructOut = ChainedStructOut {
+    chain: ChainedStructOut = ChainedStructOut{
         .s_type = SType.native_limits,
     },
     max_push_constant_size: u32,

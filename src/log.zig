@@ -1,15 +1,17 @@
 const StringView = @import("misc.zig").StringView;
 
 pub const LogLevel = enum(u32) {
+    // zig fmt: off
     off      = 0x00000000,
     @"error" = 0x00000001,
     warn     = 0x00000002,
     info     = 0x00000003,
     debug    = 0x00000004,
     trace    = 0x00000005,
+    // zig fmt: on
 };
 
-pub const LogCallback = *const fn(level: LogLevel, message: StringView, userdata: ?*anyopaque) callconv(.c) void;
+pub const LogCallback = *const fn (level: LogLevel, message: StringView, userdata: ?*anyopaque) callconv(.c) void;
 
 extern fn wgpuSetLogCallback(callback: LogCallback, userdata: ?*anyopaque) void;
 extern fn wgpuSetLogLevel(level: LogLevel) void;

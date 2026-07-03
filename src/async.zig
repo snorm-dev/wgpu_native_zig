@@ -4,6 +4,7 @@ const WGPUBool = @import("misc.zig").WGPUBool;
 // The callback mode controls how a callback for an asynchronous operation may be fired.
 //
 pub const CallbackMode = enum(u32) {
+    // zig fmt: off
     //
     //`0x00000001`.
     // Callbacks created with `wait_any_only`:
@@ -30,10 +31,12 @@ pub const CallbackMode = enum(u32) {
     // It undefined behavior to re-entrantly call into the webgpu.h API if the callback fires while inside the callstack of another webgpu.h function that is not `wgpuInstanceWaitAny` or `wgpuInstanceProcessEvents`.
     //
     allow_spontaneous    = 0x00000003,
+    // zig fmt: on
 };
 
 // Status returned from a call to ::wgpuInstanceWaitAny.
 pub const WaitStatus = enum(u32) {
+    // zig fmt: off
     // At least one Future completed successfully.
     success                   = 0x00000001,
 
@@ -48,6 +51,7 @@ pub const WaitStatus = enum(u32) {
 
     // An invalid wait was performed with Mixed-Sources.
     unsupported_mixed_sources = 0x00000005,
+    // zig fmt: on
 };
 
 //

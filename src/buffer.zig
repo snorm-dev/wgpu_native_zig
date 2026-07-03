@@ -4,7 +4,6 @@ const WGPUFlags = _misc.WGPUFlags;
 const StringView = _misc.StringView;
 const USIZE_MAX = _misc.USIZE_MAX;
 
-
 pub const WGPU_WHOLE_MAP_SIZE = USIZE_MAX;
 
 const _async = @import("async.zig");
@@ -14,22 +13,25 @@ const Future = _async.Future;
 const ChainedStruct = @import("chained_struct.zig").ChainedStruct;
 
 pub const BufferBindingType = enum(u32) {
+    // zig fmt: off
     binding_not_used  = 0x00000000, // Indicates that this BufferBindingLayout member of its parent BindGroupLayoutEntry is not used.
     @"undefined"      = 0x00000001, // Indicates no value is passed for this argument
     uniform           = 0x00000002,
     storage           = 0x00000003,
     read_only_storage = 0x00000004,
+    // zig fmt: on
 };
 
 pub const BufferBindingLayout = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    @"type": BufferBindingType = BufferBindingType.@"undefined",
+    type: BufferBindingType = BufferBindingType.undefined,
     has_dynamic_offset: WGPUBool = @intFromBool(false),
     min_binding_size: u64 = 0,
 };
 
 pub const BufferUsage = WGPUFlags;
 pub const BufferUsages = struct {
+    // zig fmt: off
     pub const none          = @as(BufferUsage, 0x0000000000000000);
     pub const map_read      = @as(BufferUsage, 0x0000000000000001);
     pub const map_write     = @as(BufferUsage, 0x0000000000000002);
@@ -41,27 +43,34 @@ pub const BufferUsages = struct {
     pub const storage       = @as(BufferUsage, 0x0000000000000080);
     pub const indirect      = @as(BufferUsage, 0x0000000000000100);
     pub const query_resolve = @as(BufferUsage, 0x0000000000000200);
+    // zig fmt: on
 };
 
 pub const BufferMapState = enum(u32) {
+    // zig fmt: off
     unmapped = 0x00000001,
     pending  = 0x00000002,
     mapped   = 0x00000003,
+    // zig fmt: on
 };
 
 pub const MapMode = WGPUFlags;
 pub const MapModes = struct {
+    // zig fmt: off
     pub const none  = @as(MapMode, 0x0000000000000000);
     pub const read  = @as(MapMode, 0x0000000000000001);
     pub const write = @as(MapMode, 0x0000000000000002);
+    // zig fmt: on
 };
 
 pub const MapAsyncStatus = enum(u32) {
+    // zig fmt: off
     success          = 0x00000001,
     instance_dropped = 0x00000002,
     @"error"         = 0x00000003,
     aborted          = 0x00000004,
     unknown          = 0x00000005,
+    // zig fmt: on
 };
 
 pub const BufferMapCallbackInfo = extern struct {
@@ -75,28 +84,28 @@ pub const BufferMapCallbackInfo = extern struct {
     userdata2: ?*anyopaque = null,
 };
 
-pub const BufferMapCallback = *const fn(status: MapAsyncStatus, message: StringView, userdata1: ?*anyopaque, userdata2: ?*anyopaque) callconv(.c) void;
+pub const BufferMapCallback = *const fn (status: MapAsyncStatus, message: StringView, userdata1: ?*anyopaque, userdata2: ?*anyopaque) callconv(.c) void;
 
 pub const BufferDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
     usage: BufferUsage,
     size: u64,
     mapped_at_creation: WGPUBool = @intFromBool(false),
 };
 
 pub const BufferProcs = struct {
-    pub const Destroy = *const fn(*Buffer) callconv(.c) void;
-    pub const GetConstMappedRange = *const fn(*Buffer, usize, usize) callconv(.c) ?*const anyopaque;
-    pub const GetMapState = *const fn(*Buffer) callconv(.c) BufferMapState;
-    pub const GetMappedRange = *const fn(*Buffer, usize, usize) callconv(.c) ?*anyopaque;
-    pub const GetSize = *const fn(*Buffer) callconv(.c) u64;
-    pub const GetUsage = *const fn(*Buffer) callconv(.c) BufferUsage;
-    pub const MapAsync = *const fn(*Buffer, MapMode, usize, usize, BufferMapCallbackInfo) callconv(.c) Future;
-    pub const SetLabel = *const fn(*Buffer, StringView) callconv(.c) void;
-    pub const Unmap = *const fn(*Buffer) callconv(.c) void;
-    pub const AddRef = *const fn(*Buffer) callconv(.c) void;
-    pub const Release = *const fn(*Buffer) callconv(.c) void;
+    pub const Destroy = *const fn (*Buffer) callconv(.c) void;
+    pub const GetConstMappedRange = *const fn (*Buffer, usize, usize) callconv(.c) ?*const anyopaque;
+    pub const GetMapState = *const fn (*Buffer) callconv(.c) BufferMapState;
+    pub const GetMappedRange = *const fn (*Buffer, usize, usize) callconv(.c) ?*anyopaque;
+    pub const GetSize = *const fn (*Buffer) callconv(.c) u64;
+    pub const GetUsage = *const fn (*Buffer) callconv(.c) BufferUsage;
+    pub const MapAsync = *const fn (*Buffer, MapMode, usize, usize, BufferMapCallbackInfo) callconv(.c) Future;
+    pub const SetLabel = *const fn (*Buffer, StringView) callconv(.c) void;
+    pub const Unmap = *const fn (*Buffer) callconv(.c) void;
+    pub const AddRef = *const fn (*Buffer) callconv(.c) void;
+    pub const Release = *const fn (*Buffer) callconv(.c) void;
 };
 
 extern fn wgpuBufferDestroy(buffer: *Buffer) void;

@@ -13,6 +13,7 @@ pub const WGPU_COPY_STRIDE_UNDEFINED = U32_MAX;
 const Buffer = @import("buffer.zig").Buffer;
 
 pub const TextureFormat = enum(u32) {
+    // zig fmt: off
     @"undefined"            = 0x00000000, // Indicates no value is passed for this argument.
     r8_unorm                = 0x00000001,
     r8_snorm                = 0x00000002,
@@ -118,33 +119,38 @@ pub const TextureFormat = enum(u32) {
     rgba16_unorm            = 0x00030005,
     rgba16_snorm            = 0x00030006,
     nv12                    = 0x00030007,
+    // zig fmt: on
 };
 
 pub const TextureUsage = WGPUFlags;
 pub const TextureUsages = struct {
+    // zig fmt: off
     pub const none              = @as(TextureUsage, 0x0000000000000000);
     pub const copy_src          = @as(TextureUsage, 0x0000000000000001);
     pub const copy_dst          = @as(TextureUsage, 0x0000000000000002);
     pub const texture_binding   = @as(TextureUsage, 0x0000000000000004);
     pub const storage_binding   = @as(TextureUsage, 0x0000000000000008);
     pub const render_attachment = @as(TextureUsage, 0x0000000000000010);
+    // zig fmt: on
 };
 
 // TODO: Like a lot of things in this file, this breaks from the wrapper code convention by having an unneeded prefix ("Texture")
 //       in front of the name, even though "Aspect" is exclusively used in TextureAspect. I've done this because just calling
 //       it "Aspect" seems like it'd confuse people thinking it is an aspect ratio or something, but should it just be "Aspect"?
 pub const TextureAspect = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
     all          = 0x00000001,
     stencil_only = 0x00000002,
     depth_only   = 0x00000003,
+    // zig fmt: on
 };
 
 pub const TextureViewDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
-    format: TextureFormat = TextureFormat.@"undefined",
-    dimension: ViewDimension = ViewDimension.@"undefined",
+    label: StringView = StringView{},
+    format: TextureFormat = TextureFormat.undefined,
+    dimension: ViewDimension = ViewDimension.undefined,
     base_mip_level: u32 = 0,
     mip_level_count: u32 = WGPU_MIP_LEVEL_COUNT_UNDEFINED,
     base_array_layer: u32 = 0,
@@ -154,9 +160,9 @@ pub const TextureViewDescriptor = extern struct {
 };
 
 pub const TextureViewProcs = struct {
-    pub const SetLabel = *const fn(*TextureView, StringView) callconv(.c) void;
-    pub const AddRef = *const fn(*TextureView) callconv(.c) void;
-    pub const Release = *const fn(*TextureView) callconv(.c) void;
+    pub const SetLabel = *const fn (*TextureView, StringView) callconv(.c) void;
+    pub const AddRef = *const fn (*TextureView) callconv(.c) void;
+    pub const Release = *const fn (*TextureView) callconv(.c) void;
 };
 
 extern fn wgpuTextureViewSetLabel(texture_view: *TextureView, label: StringView) void;
@@ -180,6 +186,7 @@ pub const TextureView = opaque {
 
 // TODO: Should this maybe go in sampler.zig instead?
 pub const SampleType = enum(u32) {
+    // zig fmt: off
     // Indicates that this TextureBindingLayout member of its parent BindGroupLayoutEntry is not used.
     binding_not_used   = 0x00000000,
 
@@ -191,9 +198,11 @@ pub const SampleType = enum(u32) {
     depth              = 0x00000004,
     s_int              = 0x00000005,
     u_int              = 0x00000006,
+    // zig fmt: on
 };
 
 pub const ViewDimension = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
     @"1d"        = 0x00000001,
     @"2d"        = 0x00000002,
@@ -201,16 +210,18 @@ pub const ViewDimension = enum(u32) {
     cube         = 0x00000004,
     cube_array   = 0x00000005,
     @"3d"        = 0x00000006,
+    // zig fmt: on
 };
 
 pub const TextureBindingLayout = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    sample_type: SampleType = SampleType.@"undefined",
+    sample_type: SampleType = SampleType.undefined,
     view_dimension: ViewDimension = ViewDimension.@"2d",
     multisampled: WGPUBool = @intFromBool(false),
 };
 
 pub const StorageTextureAccess = enum(u32) {
+    // zig fmt: off
     // Indicates that this StorageTextureBindingLayout member of its parent BindGroupLayoutEntry is not used.
     binding_not_used = 0x00000000,
 
@@ -220,20 +231,23 @@ pub const StorageTextureAccess = enum(u32) {
     write_only       = 0x00000002,
     read_only        = 0x00000003,
     read_write       = 0x00000004,
+    // zig fmt: on
 };
 
 pub const StorageTextureBindingLayout = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    access: StorageTextureAccess = StorageTextureAccess.@"undefined",
-    format: TextureFormat = TextureFormat.@"undefined",
+    access: StorageTextureAccess = StorageTextureAccess.undefined,
+    format: TextureFormat = TextureFormat.undefined,
     view_dimension: ViewDimension = ViewDimension.@"2d",
 };
 
 pub const TextureDimension = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
     @"1d"        = 0x00000001,
     @"2d"        = 0x00000002,
     @"3d"        = 0x00000003,
+    // zig fmt: on
 };
 
 pub const Extent3D = extern struct {
@@ -244,7 +258,7 @@ pub const Extent3D = extern struct {
 
 pub const TextureDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
     usage: TextureUsage,
     dimension: TextureDimension = TextureDimension.@"2d",
     size: Extent3D,
@@ -252,23 +266,23 @@ pub const TextureDescriptor = extern struct {
     mip_level_count: u32 = 1,
     sample_count: u32 = 1,
     view_format_count: usize = 0,
-    view_formats: [*]const TextureFormat = &[_]TextureFormat {},
+    view_formats: [*]const TextureFormat = &[_]TextureFormat{},
 };
 
 pub const TextureProcs = struct {
-    pub const CreateView = *const fn(*Texture, ?*const TextureViewDescriptor) callconv(.c) ?*TextureView;
-    pub const Destroy = *const fn(*Texture) callconv(.c) void;
-    pub const GetDepthOrArrayLayers = *const fn(*Texture) callconv(.c) u32;
-    pub const GetDimension = *const fn(*Texture) callconv(.c) TextureDimension;
-    pub const GetFormat = *const fn(*Texture) callconv(.c) TextureFormat;
-    pub const GetHeight = *const fn(*Texture) callconv(.c) u32;
-    pub const GetMipLevelCount = *const fn(*Texture) callconv(.c) u32;
-    pub const GetSampleCount = *const fn(*Texture) callconv(.c) u32;
-    pub const GetUsage = *const fn(*Texture) callconv(.c) TextureUsage;
-    pub const GetWidth = *const fn(*Texture) callconv(.c) u32;
-    pub const SetLabel = *const fn(*Texture, StringView) callconv(.c) void;
-    pub const AddRef = *const fn(*Texture) callconv(.c) void;
-    pub const Release = *const fn(*Texture) callconv(.c) void;
+    pub const CreateView = *const fn (*Texture, ?*const TextureViewDescriptor) callconv(.c) ?*TextureView;
+    pub const Destroy = *const fn (*Texture) callconv(.c) void;
+    pub const GetDepthOrArrayLayers = *const fn (*Texture) callconv(.c) u32;
+    pub const GetDimension = *const fn (*Texture) callconv(.c) TextureDimension;
+    pub const GetFormat = *const fn (*Texture) callconv(.c) TextureFormat;
+    pub const GetHeight = *const fn (*Texture) callconv(.c) u32;
+    pub const GetMipLevelCount = *const fn (*Texture) callconv(.c) u32;
+    pub const GetSampleCount = *const fn (*Texture) callconv(.c) u32;
+    pub const GetUsage = *const fn (*Texture) callconv(.c) TextureUsage;
+    pub const GetWidth = *const fn (*Texture) callconv(.c) u32;
+    pub const SetLabel = *const fn (*Texture, StringView) callconv(.c) void;
+    pub const AddRef = *const fn (*Texture) callconv(.c) void;
+    pub const Release = *const fn (*Texture) callconv(.c) void;
 };
 
 extern fn wgpuTextureCreateView(texture: *Texture, descriptor: ?*const TextureViewDescriptor) ?*TextureView;

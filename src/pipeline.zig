@@ -28,7 +28,7 @@ pub const PushConstantRange = extern struct {
 };
 
 pub const PipelineLayoutExtras = extern struct {
-    chain: ChainedStruct = ChainedStruct {
+    chain: ChainedStruct = ChainedStruct{
         .s_type = SType.pipeline_layout_extras,
     },
     push_constant_range_count: usize,
@@ -37,17 +37,13 @@ pub const PipelineLayoutExtras = extern struct {
 
 pub const PipelineLayoutDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
     bind_group_layout_count: usize,
     bind_group_layouts: [*]const *BindGroupLayout,
 
-    pub inline fn withPushConstantRanges(
-        self: PipelineLayoutDescriptor,
-        push_constant_range_count: usize,
-        push_constant_ranges: [*]const PushConstantRange
-    ) PipelineLayoutDescriptor {
+    pub inline fn withPushConstantRanges(self: PipelineLayoutDescriptor, push_constant_range_count: usize, push_constant_ranges: [*]const PushConstantRange) PipelineLayoutDescriptor {
         var pld = self;
-        pld.next_in_chain = @ptrCast(&PipelineLayoutExtras {
+        pld.next_in_chain = @ptrCast(&PipelineLayoutExtras{
             .push_constant_range_count = push_constant_range_count,
             .push_constant_ranges = push_constant_ranges,
         });
@@ -56,9 +52,9 @@ pub const PipelineLayoutDescriptor = extern struct {
 };
 
 pub const PipelineLayoutProcs = struct {
-    pub const SetLabel = *const fn(*PipelineLayout, StringView) callconv(.c) void;
-    pub const AddRef = *const fn(*PipelineLayout) callconv(.c) void;
-    pub const Release = *const fn(*PipelineLayout) callconv(.c) void;
+    pub const SetLabel = *const fn (*PipelineLayout, StringView) callconv(.c) void;
+    pub const AddRef = *const fn (*PipelineLayout) callconv(.c) void;
+    pub const Release = *const fn (*PipelineLayout) callconv(.c) void;
 };
 
 extern fn wgpuPipelineLayoutSetLabel(pipeline_layout: *PipelineLayout, label: StringView) void;
@@ -90,24 +86,26 @@ pub const ConstantEntry = extern struct {
 pub const ProgrammableStageDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     module: *ShaderModule,
-    entry_point: StringView = StringView {},
+    entry_point: StringView = StringView{},
     constant_count: usize = 0,
-    constants: [*]const ConstantEntry = &[0]ConstantEntry {},
+    constants: [*]const ConstantEntry = &[0]ConstantEntry{},
 };
 
 pub const ComputePipelineDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
     layout: ?*PipelineLayout = null,
     compute: ProgrammableStageDescriptor,
 };
 
 pub const CreatePipelineAsyncStatus = enum(u32) {
+    // zig fmt: off
     success          = 0x00000001,
     instance_dropped = 0x00000002,
     validation_error = 0x00000003,
     internal_error   = 0x00000004,
     unknown          = 0x00000005,
+    // zig fmt: on
 };
 
 pub const CreateComputePipelineAsyncCallbackInfo = extern struct {
@@ -122,7 +120,7 @@ pub const CreateComputePipelineAsyncCallbackInfo = extern struct {
 };
 
 // TODO: This should probably be in device.zig, as well as its RenderPipeline counterpart
-pub const CreateComputePipelineAsyncCallback = *const fn(
+pub const CreateComputePipelineAsyncCallback = *const fn (
     status: CreatePipelineAsyncStatus,
     pipeline: ?*ComputePipeline,
     message: StringView,
@@ -131,10 +129,10 @@ pub const CreateComputePipelineAsyncCallback = *const fn(
 ) callconv(.c) void;
 
 pub const ComputePipelineProcs = struct {
-    pub const GetBindGroupLayout = *const fn(*ComputePipeline, u32) callconv(.c) ?*BindGroupLayout;
-    pub const SetLabel = *const fn(*ComputePipeline, StringView) callconv(.c) void;
-    pub const AddRef = *const fn(*ComputePipeline) callconv(.c) void;
-    pub const Release = *const fn(*ComputePipeline) callconv(.c) void;
+    pub const GetBindGroupLayout = *const fn (*ComputePipeline, u32) callconv(.c) ?*BindGroupLayout;
+    pub const SetLabel = *const fn (*ComputePipeline, StringView) callconv(.c) void;
+    pub const AddRef = *const fn (*ComputePipeline) callconv(.c) void;
+    pub const Release = *const fn (*ComputePipeline) callconv(.c) void;
 };
 
 extern fn wgpuComputePipelineGetBindGroupLayout(compute_pipeline: *ComputePipeline, group_index: u32) ?*BindGroupLayout;
@@ -162,13 +160,16 @@ pub const ComputePipeline = opaque {
 };
 
 pub const VertexStepMode = enum(u32) {
+    // zig fmt: off
     vertex_buffer_not_used = 0x00000000, // This VertexBufferLayout is a "hole" in the VertexState `buffers` array.
     @"undefined"           = 0x00000001, // Indicates no value is passed for this argument.
     vertex                 = 0x00000002,
     instance               = 0x00000003,
+    // zig fmt: on
 };
 
 pub const VertexFormat = enum(u32) {
+    // zig fmt: off
     uint8           = 0x00000001,
     uint8x2         = 0x00000002,
     uint8x4         = 0x00000003,
@@ -210,6 +211,7 @@ pub const VertexFormat = enum(u32) {
     sint32x4        = 0x00000027,
     unorm10_10_10_2 = 0x00000028,
     unorm8x4_bgra   = 0x00000029,
+    // zig fmt: on
 };
 
 pub const VertexAttribute = extern struct {
@@ -232,45 +234,52 @@ pub const VertexBufferLayout = extern struct {
 pub const VertexState = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     module: *ShaderModule,
-    entry_point: StringView = StringView {},
+    entry_point: StringView = StringView{},
     constant_count: usize = 0,
-    constants: [*]const ConstantEntry = &[0]ConstantEntry {},
+    constants: [*]const ConstantEntry = &[0]ConstantEntry{},
     buffer_count: usize = 0,
-    buffers: [*]const VertexBufferLayout = &[0]VertexBufferLayout {},
+    buffers: [*]const VertexBufferLayout = &[0]VertexBufferLayout{},
 };
 
 pub const PrimitiveTopology = enum(u32) {
+    // zig fmt: off
     @"undefined"   = 0x00000000, // Indicates no value is passed for this argument.
     point_list     = 0x00000001,
     line_list      = 0x00000002,
     line_strip     = 0x00000003,
     triangle_list  = 0x00000004,
     triangle_strip = 0x00000005,
+    // zig fmt: on
 };
 
 pub const FrontFace = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
     ccw          = 0x00000001,
     cw           = 0x00000002,
+    // zig fmt: on
 };
 
 pub const CullMode = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument
     none         = 0x00000001,
     front        = 0x00000002,
     back         = 0x00000003,
+    // zig fmt: on
 };
 
 pub const PrimitiveState = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     topology: PrimitiveTopology = PrimitiveTopology.triangle_list,
-    strip_index_format: IndexFormat = IndexFormat.@"undefined",
+    strip_index_format: IndexFormat = IndexFormat.undefined,
     front_face: FrontFace = FrontFace.ccw,
     cull_mode: CullMode = CullMode.none,
     unclipped_depth: WGPUBool = @intFromBool(false),
 };
 
 pub const StencilOperation = enum(u32) {
+    // zig fmt: off
     @"undefined"    = 0x00000000, // Indicates no value is passed for this argument.
     keep            = 0x00000001,
     zero            = 0x00000002,
@@ -280,6 +289,7 @@ pub const StencilOperation = enum(u32) {
     decrement_clamp = 0x00000006,
     increment_wrap  = 0x00000007,
     decrement_wrap  = 0x00000008,
+    // zig fmt: on
 };
 
 pub const StencilFaceState = extern struct {
@@ -292,8 +302,8 @@ pub const StencilFaceState = extern struct {
 pub const DepthStencilState = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     format: TextureFormat,
-    depth_write_enabled: OptionalBool = OptionalBool.@"undefined",
-    depth_compare: CompareFunction = CompareFunction.@"undefined",
+    depth_write_enabled: OptionalBool = OptionalBool.undefined,
+    depth_compare: CompareFunction = CompareFunction.undefined,
     stencil_front: StencilFaceState,
     stencil_back: StencilFaceState,
     stencil_read_mask: u32 = 0xffffffff,
@@ -311,15 +321,18 @@ pub const MultisampleState = extern struct {
 };
 
 pub const BlendOperation = enum(u32) {
+    // zig fmt: off
     @"undefined"     = 0x00000000, // Indicates no value is passed for this argument
     add              = 0x00000001,
     subtract         = 0x00000002,
     reverse_subtract = 0x00000003,
     min              = 0x00000004,
     max              = 0x00000005,
+    // zig fmt: on
 };
 
 pub const BlendFactor = enum(u32) {
+    // zig fmt: off
     @"undefined"          = 0x00000000, // Indicates no value is passed for this argument
     zero                  = 0x00000001,
     one                   = 0x00000002,
@@ -338,6 +351,7 @@ pub const BlendFactor = enum(u32) {
     one_minus_src_1       = 0x0000000F,
     src_1_alpha           = 0x00000010,
     one_minus_src_1_alpha = 0x00000011,
+    // zig fmt: on
 };
 
 pub const BlendComponent = extern struct {
@@ -346,12 +360,12 @@ pub const BlendComponent = extern struct {
     dst_factor: BlendFactor = BlendFactor.zero,
 
     // Preset components borrowed from wgpu-types
-    pub const replace = BlendComponent {
+    pub const replace = BlendComponent{
         .operation = BlendOperation.add,
         .src_factor = BlendFactor.one,
         .dst_factor = BlendFactor.zero,
     };
-    pub const over = BlendComponent {
+    pub const over = BlendComponent{
         .operation = BlendOperation.add,
         .src_factor = BlendFactor.one,
         .dst_factor = BlendFactor.one_minus_src_alpha,
@@ -363,19 +377,19 @@ pub const BlendState = extern struct {
     alpha: BlendComponent,
 
     // Preset blend states borrowed from wgpu-types
-    pub const replace = BlendState {
+    pub const replace = BlendState{
         .color = BlendComponent.replace,
         .alpha = BlendComponent.replace,
     };
-    pub const alpha_blending = BlendState {
-        .color = BlendComponent {
+    pub const alpha_blending = BlendState{
+        .color = BlendComponent{
             .operation = BlendOperation.add,
             .src_factor = BlendFactor.src_alpha,
             .dst_factor = BlendFactor.one_minus_src_alpha,
         },
         .alpha = BlendComponent.over,
     };
-    pub const premultiplied_alpha_blending = BlendState {
+    pub const premultiplied_alpha_blending = BlendState{
         .color = BlendComponent.over,
         .alpha = BlendComponent.over,
     };
@@ -383,12 +397,14 @@ pub const BlendState = extern struct {
 
 pub const ColorWriteMask = WGPUFlags;
 pub const ColorWriteMasks = struct {
+    // zig fmt: off
     pub const none  = @as(ColorWriteMask, 0x0000000000000000);
     pub const red   = @as(ColorWriteMask, 0x0000000000000001);
     pub const green = @as(ColorWriteMask, 0x0000000000000002);
     pub const blue  = @as(ColorWriteMask, 0x0000000000000004);
     pub const alpha = @as(ColorWriteMask, 0x0000000000000008);
     pub const all        = none | red | green | blue | alpha;
+    // zig fmt: on
 };
 
 pub const ColorTargetState = extern struct {
@@ -406,16 +422,16 @@ pub const ColorTargetState = extern struct {
 pub const FragmentState = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     module: *ShaderModule,
-    entry_point: StringView = StringView {},
+    entry_point: StringView = StringView{},
     constant_count: usize = 0,
-    constants: [*]const ConstantEntry = &[0]ConstantEntry {},
+    constants: [*]const ConstantEntry = &[0]ConstantEntry{},
     target_count: usize,
     targets: [*]const ColorTargetState,
 };
 
 pub const RenderPipelineDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
     layout: ?*PipelineLayout = null,
     vertex: VertexState,
     primitive: PrimitiveState,
@@ -425,10 +441,10 @@ pub const RenderPipelineDescriptor = extern struct {
 };
 
 pub const RenderPipelineProcs = struct {
-    pub const GetBindGroupLayout = *const fn(*RenderPipeline, u32) callconv(.c) ?*BindGroupLayout;
-    pub const SetLabel = *const fn(*RenderPipeline, StringView) callconv(.c) void;
-    pub const AddRef = *const fn(*RenderPipeline) callconv(.c) void;
-    pub const Release = *const fn(*RenderPipeline) callconv(.c) void;
+    pub const GetBindGroupLayout = *const fn (*RenderPipeline, u32) callconv(.c) ?*BindGroupLayout;
+    pub const SetLabel = *const fn (*RenderPipeline, StringView) callconv(.c) void;
+    pub const AddRef = *const fn (*RenderPipeline) callconv(.c) void;
+    pub const Release = *const fn (*RenderPipeline) callconv(.c) void;
 };
 
 extern fn wgpuRenderPipelineGetBindGroupLayout(render_pipeline: *RenderPipeline, group_index: u32) ?*BindGroupLayout;
@@ -466,7 +482,7 @@ pub const CreateRenderPipelineAsyncCallbackInfo = extern struct {
     userdata2: ?*anyopaque = null,
 };
 
-pub const CreateRenderPipelineAsyncCallback = *const fn(
+pub const CreateRenderPipelineAsyncCallback = *const fn (
     status: CreatePipelineAsyncStatus,
     pipeline: ?*RenderPipeline,
     message: StringView,

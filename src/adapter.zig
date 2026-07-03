@@ -30,19 +30,24 @@ const CallbackMode = _async.CallbackMode;
 const Future = _async.Future;
 
 pub const PowerPreference = enum(u32) {
+    // zig fmt: off
     @"undefined"        = 0x00000000, // No preference.
     low_power           = 0x00000001,
     high_performance    = 0x00000002,
+    // zig fmt: on
 };
 
 pub const AdapterType = enum(u32) {
+    // zig fmt: off
     discrete_gpu   = 0x00000001,
     integrated_gpu = 0x00000002,
     cpu            = 0x00000003,
     unknown        = 0x00000004,
+    // zig fmt: on
 };
 
 pub const BackendType = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument
     null         = 0x00000001,
     webgpu       = 0x00000002,
@@ -52,11 +57,14 @@ pub const BackendType = enum(u32) {
     vulkan       = 0x00000006,
     opengl       = 0x00000007,
     opengl_es    = 0x00000008,
+    // zig fmt: on
 };
 
 pub const FeatureLevel = enum(u32) {
+    // zig fmt: off
     compatibility = 0x00000001, // "Compatibility" profile which can be supported on OpenGL ES 3.1.
     core          = 0x00000002, // "Core" profile which can be supported on Vulkan/Metal/D3D12.
+    // zig fmt: on
 };
 
 pub const RequestAdapterOptions = extern struct {
@@ -69,7 +77,7 @@ pub const RequestAdapterOptions = extern struct {
     // FeatureLevel.core is the default in the JS API, but in C, this field is **required** (must not be undefined).
     feature_level: FeatureLevel = FeatureLevel.core,
 
-    power_preference: PowerPreference = PowerPreference.@"undefined",
+    power_preference: PowerPreference = PowerPreference.undefined,
 
     // If true, requires the adapter to be a "fallback" adapter as defined by the JS spec.
     // If this is not possible, the request returns null.
@@ -77,7 +85,7 @@ pub const RequestAdapterOptions = extern struct {
 
     // If set, requires the adapter to have a particular backend type.
     // If this is not possible, the request returns null.
-    backend_type: BackendType = BackendType.@"undefined",
+    backend_type: BackendType = BackendType.undefined,
 
     // If set, requires the adapter to be able to output to a particular surface.
     // If this is not possible, the request returns null.
@@ -85,11 +93,13 @@ pub const RequestAdapterOptions = extern struct {
 };
 
 pub const RequestAdapterStatus = enum(u32) {
+    // zig fmt: off
     success          = 0x00000001,
     instance_dropped = 0x00000002,
     unavailable      = 0x00000003,
     @"error"         = 0x00000004,
     unknown          = 0x00000005,
+    // zig fmt: on
 };
 
 pub const RequestAdapterCallbackInfo = extern struct {
@@ -104,7 +114,7 @@ pub const RequestAdapterCallbackInfo = extern struct {
 };
 
 // TODO: This should maybe be relocated to instance.zig; it is only used there.
-pub const RequestAdapterCallback = *const fn(
+pub const RequestAdapterCallback = *const fn (
     status: RequestAdapterStatus,
     adapter: ?*Adapter,
     message: StringView,
@@ -119,7 +129,7 @@ pub const RequestAdapterResponse = struct {
 };
 
 pub const AdapterInfoProcs = struct {
-    pub const FreeMembers = *const fn(AdapterInfo) callconv(.c) void;
+    pub const FreeMembers = *const fn (AdapterInfo) callconv(.c) void;
 };
 
 extern fn wgpuAdapterInfoFreeMembers(adapter_info: AdapterInfo) void;
@@ -141,13 +151,13 @@ pub const AdapterInfo = extern struct {
 };
 
 pub const AdapterProcs = struct {
-    pub const GetFeatures = *const fn(*Adapter, *SupportedFeatures) callconv(.c) void;
-    pub const GetLimits = *const fn(*Adapter, *Limits) callconv(.c) Status;
-    pub const GetInfo = *const fn(*Adapter, *AdapterInfo) callconv(.c) Status;
-    pub const HasFeature = *const fn(*Adapter, FeatureName) callconv(.c) WGPUBool;
-    pub const RequestDevice = *const fn(*Adapter, ?*const DeviceDescriptor, RequestDeviceCallbackInfo) callconv(.c) Future;
-    pub const AddRef = *const fn(*Adapter) callconv(.c) void;
-    pub const Release = *const fn(*Adapter) callconv(.c) void;
+    pub const GetFeatures = *const fn (*Adapter, *SupportedFeatures) callconv(.c) void;
+    pub const GetLimits = *const fn (*Adapter, *Limits) callconv(.c) Status;
+    pub const GetInfo = *const fn (*Adapter, *AdapterInfo) callconv(.c) Status;
+    pub const HasFeature = *const fn (*Adapter, FeatureName) callconv(.c) WGPUBool;
+    pub const RequestDevice = *const fn (*Adapter, ?*const DeviceDescriptor, RequestDeviceCallbackInfo) callconv(.c) Future;
+    pub const AddRef = *const fn (*Adapter) callconv(.c) void;
+    pub const Release = *const fn (*Adapter) callconv(.c) void;
 };
 
 extern fn wgpuAdapterGetFeatures(adapter: *Adapter, features: *SupportedFeatures) void;
@@ -158,7 +168,7 @@ extern fn wgpuAdapterRequestDevice(adapter: *Adapter, descriptor: ?*const Device
 extern fn wgpuAdapterAddRef(adapter: *Adapter) void;
 extern fn wgpuAdapterRelease(adapter: *Adapter) void;
 
-pub const Adapter = opaque{
+pub const Adapter = opaque {
     pub inline fn getFeatures(self: *Adapter, features: *SupportedFeatures) void {
         wgpuAdapterGetFeatures(self, features);
     }
@@ -174,7 +184,7 @@ pub const Adapter = opaque{
 
     fn defaultDeviceCallback(status: RequestDeviceStatus, device: ?*Device, message: StringView, userdata1: ?*anyopaque, userdata2: ?*anyopaque) callconv(.c) void {
         const ud_response: *RequestDeviceResponse = @ptrCast(@alignCast(userdata1));
-        ud_response.* = RequestDeviceResponse {
+        ud_response.* = RequestDeviceResponse{
             .status = status,
             .message = message.toSlice(),
             .device = device,
@@ -189,7 +199,7 @@ pub const Adapter = opaque{
     pub fn requestDeviceSync(self: *Adapter, instance: *Instance, descriptor: ?*const DeviceDescriptor, io: std.Io, polling_interval: std.Io.Duration) RequestDeviceResponse {
         var response: RequestDeviceResponse = undefined;
         var completed = false;
-        const callback_info = RequestDeviceCallbackInfo {
+        const callback_info = RequestDeviceCallbackInfo{
             .callback = defaultDeviceCallback,
             .userdata1 = @ptrCast(&response),
             .userdata2 = @ptrCast(&completed),
@@ -200,7 +210,7 @@ pub const Adapter = opaque{
         //       it takes in futures and returns when one of them completes.
         _ = device_future;
         instance.processEvents();
-        while(!completed) {
+        while (!completed) {
             io.sleep(polling_interval, std.Io.Clock.cpu_thread) catch {}; // is this the correct clock?
             instance.processEvents();
         }
@@ -224,14 +234,14 @@ test "can request device" {
 
     const instance = Instance.create(null);
     const adapter_response = instance.?.requestAdapterSync(null, testing.io, std.Io.Duration.fromMilliseconds(200));
-    const adapter: ?*Adapter = switch(adapter_response.status) {
+    const adapter: ?*Adapter = switch (adapter_response.status) {
         .success => adapter_response.adapter,
         else => null,
     };
     const device_response = adapter.?.requestDeviceSync(instance.?, null, testing.io, std.Io.Duration.fromMilliseconds(200));
-    const device: ?*Device = switch(device_response.status) {
+    const device: ?*Device = switch (device_response.status) {
         .success => device_response.device,
-        else => null
+        else => null,
     };
     try testing.expect(device != null);
 }

@@ -40,27 +40,27 @@ pub const ComputePassTimestampWrites = TimestampWrites;
 
 pub const ComputePassDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
     timestamp_writes: ?*const ComputePassTimestampWrites = null,
 };
 
 pub const CommandEncoderDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
 };
 
 const ComputePassEncoderProcs = struct {
-    pub const DispatchWorkgroups = *const fn(*ComputePassEncoder, u32, u32, u32) callconv(.c) void;
-    pub const DispatchWorkgroupsIndirect = *const fn(*ComputePassEncoder, *Buffer, u64) callconv(.c) void;
-    pub const End = *const fn(*ComputePassEncoder) callconv(.c) void;
-    pub const InsertDebugMarker = *const fn(*ComputePassEncoder, StringView) callconv(.c) void;
-    pub const PopDebugGroup = *const fn(*ComputePassEncoder) callconv(.c) void;
-    pub const PushDebugGroup = *const fn(*ComputePassEncoder, StringView) callconv(.c) void;
-    pub const SetBindGroup = *const fn(*ComputePassEncoder, u32, *BindGroup, usize, ?[*]const u32) callconv(.c) void;
-    pub const SetLabel = *const fn(*ComputePassEncoder, StringView) callconv(.c) void;
-    pub const SetPipeline = *const fn(*ComputePassEncoder, *ComputePipeline) callconv(.c) void;
-    pub const AddRef = *const fn(*ComputePassEncoder) callconv(.c) void;
-    pub const Release = *const fn(*ComputePassEncoder) callconv(.c) void;
+    pub const DispatchWorkgroups = *const fn (*ComputePassEncoder, u32, u32, u32) callconv(.c) void;
+    pub const DispatchWorkgroupsIndirect = *const fn (*ComputePassEncoder, *Buffer, u64) callconv(.c) void;
+    pub const End = *const fn (*ComputePassEncoder) callconv(.c) void;
+    pub const InsertDebugMarker = *const fn (*ComputePassEncoder, StringView) callconv(.c) void;
+    pub const PopDebugGroup = *const fn (*ComputePassEncoder) callconv(.c) void;
+    pub const PushDebugGroup = *const fn (*ComputePassEncoder, StringView) callconv(.c) void;
+    pub const SetBindGroup = *const fn (*ComputePassEncoder, u32, *BindGroup, usize, ?[*]const u32) callconv(.c) void;
+    pub const SetLabel = *const fn (*ComputePassEncoder, StringView) callconv(.c) void;
+    pub const SetPipeline = *const fn (*ComputePassEncoder, *ComputePipeline) callconv(.c) void;
+    pub const AddRef = *const fn (*ComputePassEncoder) callconv(.c) void;
+    pub const Release = *const fn (*ComputePassEncoder) callconv(.c) void;
 
     // wgpu-native procs?
     // pub const SetPushConstants = *const fn(*ComputePassEncoder, u32, u32, *const anyopaque) callconv(.c) void;
@@ -142,15 +142,19 @@ pub const ComputePassEncoder = opaque {
 };
 
 pub const LoadOp = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
     load         = 0x00000001,
     clear        = 0x00000002,
+    // zig fmt: on
 };
 
 pub const StoreOp = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument
     store        = 0x00000001,
     discard      = 0x00000002,
+    // zig fmt: on
 };
 
 pub const Color = extern struct {
@@ -167,17 +171,17 @@ pub const ColorAttachment = extern struct {
     resolve_target: ?*TextureView = null,
     load_op: LoadOp = LoadOp.clear,
     store_op: StoreOp = StoreOp.store,
-    clear_value: Color = Color {},
+    clear_value: Color = Color{},
 };
 
 pub const DepthStencilAttachment = extern struct {
     view: *TextureView,
-    depth_load_op: LoadOp = LoadOp.@"undefined",
-    depth_store_op: StoreOp = StoreOp.@"undefined",
+    depth_load_op: LoadOp = LoadOp.undefined,
+    depth_store_op: StoreOp = StoreOp.undefined,
     depth_clear_value: f32 = 0,
     depth_read_only: WGPUBool = @intFromBool(false),
-    stencil_load_op: LoadOp = LoadOp.@"undefined",
-    stencil_store_op: StoreOp = StoreOp.@"undefined",
+    stencil_load_op: LoadOp = LoadOp.undefined,
+    stencil_store_op: StoreOp = StoreOp.undefined,
     stencil_clear_value: u32 = 0,
     stencil_read_only: WGPUBool = @intFromBool(false),
 };
@@ -185,15 +189,13 @@ pub const DepthStencilAttachment = extern struct {
 pub const RenderPassTimestampWrites = TimestampWrites;
 
 pub const RenderPassMaxDrawCount = extern struct {
-    chain: ChainedStruct = ChainedStruct {
-        .s_type = SType.render_pass_max_draw_count
-    },
+    chain: ChainedStruct = ChainedStruct{ .s_type = SType.render_pass_max_draw_count },
     max_draw_count: u64 = 50000000,
 };
 
 pub const RenderPassDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
     color_attachment_count: usize,
     color_attachments: [*]const ColorAttachment,
     depth_stencil_attachment: ?*const DepthStencilAttachment = null,
@@ -202,7 +204,7 @@ pub const RenderPassDescriptor = extern struct {
 
     pub inline fn withMaxDrawCount(self: RenderPassDescriptor, max_draw_count: u64) RenderPassDescriptor {
         var descriptor = self;
-        descriptor.next_in_chain = @ptrCast(&RenderPassMaxDrawCount {
+        descriptor.next_in_chain = @ptrCast(&RenderPassMaxDrawCount{
             .max_draw_count = max_draw_count,
         });
 
@@ -211,28 +213,28 @@ pub const RenderPassDescriptor = extern struct {
 };
 
 pub const RenderPassEncoderProcs = struct {
-    pub const BeginOcclusionQuery = *const fn(*RenderPassEncoder, u32) callconv(.c) void;
-    pub const Draw = *const fn(*RenderPassEncoder, u32, u32, u32, u32) callconv(.c) void;
-    pub const DrawIndexed = *const fn(*RenderPassEncoder, u32, u32, u32, i32, u32) callconv(.c) void;
-    pub const DrawIndexedIndirect = *const fn(*RenderPassEncoder, *Buffer, u64) callconv(.c) void;
-    pub const DrawIndirect = *const fn(*RenderPassEncoder, *Buffer, u64) callconv(.c) void;
-    pub const End = *const fn(*RenderPassEncoder) callconv(.c) void;
-    pub const EndOcclusionQuery = *const fn(*RenderPassEncoder) callconv(.c) void;
-    pub const ExecuteBundles = *const fn(*RenderPassEncoder, usize, [*]const *const RenderBundle) callconv(.c) void;
-    pub const InsertDebugMarker = *const fn(*RenderPassEncoder, StringView) callconv(.c) void;
-    pub const PopDebugGroup = *const fn(*RenderPassEncoder) callconv(.c) void;
-    pub const PushDebugGroup = *const fn(*RenderPassEncoder, StringView) callconv(.c) void;
-    pub const SetBindGroup = *const fn(*RenderPassEncoder, u32, *BindGroup, usize, ?[*]const u32) callconv(.c) void;
-    pub const SetBlendConstant = *const fn(*RenderPassEncoder, *const Color) callconv(.c) void;
-    pub const SetIndexBuffer = *const fn(*RenderPassEncoder, *Buffer, IndexFormat, u64, u64) callconv(.c) void;
-    pub const SetLabel = *const fn(*RenderPassEncoder, StringView) callconv(.c) void;
-    pub const SetPipeline = *const fn(*RenderPassEncoder, *RenderPipeline) callconv(.c) void;
-    pub const SetScissorRect = *const fn(*RenderPassEncoder, u32, u32, u32, u32) callconv(.c) void;
-    pub const SetStencilReference = *const fn(*RenderPassEncoder, u32) callconv(.c) void;
-    pub const SetVertexBuffer = *const fn(*RenderPassEncoder, u32, *Buffer, u64, u64) callconv(.c) void;
-    pub const SetViewport = *const fn(*RenderPassEncoder, f32, f32, f32, f32, f32, f32) callconv(.c) void;
-    pub const AddRef = *const fn(*RenderPassEncoder) callconv(.c) void;
-    pub const Release = *const fn(*RenderPassEncoder) callconv(.c) void;
+    pub const BeginOcclusionQuery = *const fn (*RenderPassEncoder, u32) callconv(.c) void;
+    pub const Draw = *const fn (*RenderPassEncoder, u32, u32, u32, u32) callconv(.c) void;
+    pub const DrawIndexed = *const fn (*RenderPassEncoder, u32, u32, u32, i32, u32) callconv(.c) void;
+    pub const DrawIndexedIndirect = *const fn (*RenderPassEncoder, *Buffer, u64) callconv(.c) void;
+    pub const DrawIndirect = *const fn (*RenderPassEncoder, *Buffer, u64) callconv(.c) void;
+    pub const End = *const fn (*RenderPassEncoder) callconv(.c) void;
+    pub const EndOcclusionQuery = *const fn (*RenderPassEncoder) callconv(.c) void;
+    pub const ExecuteBundles = *const fn (*RenderPassEncoder, usize, [*]const *const RenderBundle) callconv(.c) void;
+    pub const InsertDebugMarker = *const fn (*RenderPassEncoder, StringView) callconv(.c) void;
+    pub const PopDebugGroup = *const fn (*RenderPassEncoder) callconv(.c) void;
+    pub const PushDebugGroup = *const fn (*RenderPassEncoder, StringView) callconv(.c) void;
+    pub const SetBindGroup = *const fn (*RenderPassEncoder, u32, *BindGroup, usize, ?[*]const u32) callconv(.c) void;
+    pub const SetBlendConstant = *const fn (*RenderPassEncoder, *const Color) callconv(.c) void;
+    pub const SetIndexBuffer = *const fn (*RenderPassEncoder, *Buffer, IndexFormat, u64, u64) callconv(.c) void;
+    pub const SetLabel = *const fn (*RenderPassEncoder, StringView) callconv(.c) void;
+    pub const SetPipeline = *const fn (*RenderPassEncoder, *RenderPipeline) callconv(.c) void;
+    pub const SetScissorRect = *const fn (*RenderPassEncoder, u32, u32, u32, u32) callconv(.c) void;
+    pub const SetStencilReference = *const fn (*RenderPassEncoder, u32) callconv(.c) void;
+    pub const SetVertexBuffer = *const fn (*RenderPassEncoder, u32, *Buffer, u64, u64) callconv(.c) void;
+    pub const SetViewport = *const fn (*RenderPassEncoder, f32, f32, f32, f32, f32, f32) callconv(.c) void;
+    pub const AddRef = *const fn (*RenderPassEncoder) callconv(.c) void;
+    pub const Release = *const fn (*RenderPassEncoder) callconv(.c) void;
 
     // wgpu-native procs?
     // pub const SetPushConstants = *const fn(*RenderPassEncoder, ShaderStage, u32, u32, *const anyopaque) callconv(.c) void;
@@ -379,13 +381,13 @@ pub const RenderPassEncoder = opaque {
 
 pub const CommandBufferDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    label: StringView = StringView {},
+    label: StringView = StringView{},
 };
 
 pub const CommandBufferProcs = struct {
-    pub const SetLabel = *const fn(*CommandBuffer, StringView) callconv(.c) void;
-    pub const AddRef = *const fn(*CommandBuffer) callconv(.c) void;
-    pub const Release = *const fn(*CommandBuffer) callconv(.c) void;
+    pub const SetLabel = *const fn (*CommandBuffer, StringView) callconv(.c) void;
+    pub const AddRef = *const fn (*CommandBuffer) callconv(.c) void;
+    pub const Release = *const fn (*CommandBuffer) callconv(.c) void;
 };
 
 extern fn wgpuCommandBufferSetLabel(command_buffer: *CommandBuffer, label: StringView) void;
@@ -408,22 +410,22 @@ pub const CommandBuffer = opaque {
 };
 
 pub const CommandEncoderProcs = struct {
-    pub const BeginComputePass = *const fn(*CommandEncoder, ?*const ComputePassDescriptor) callconv(.c) ?*ComputePassEncoder;
-    pub const BeginRenderPass = *const fn(*CommandEncoder, *const RenderPassDescriptor) callconv(.c) ?*RenderPassEncoder;
-    pub const ClearBuffer = *const fn(*CommandEncoder, *Buffer, u64, u64) callconv(.c) void;
-    pub const CopyBufferToBuffer = *const fn(*CommandEncoder, *Buffer, u64, *Buffer, u64, u64) callconv(.c) void;
-    pub const CopyBufferToTexture = *const fn(*CommandEncoder, *const TexelCopyBufferInfo, *const TexelCopyTextureInfo, *const Extent3D) callconv(.c) void;
-    pub const CopyTextureToBuffer = *const fn(*CommandEncoder, *const TexelCopyTextureInfo, *const TexelCopyBufferInfo, *const Extent3D) callconv(.c) void;
-    pub const CopyTextureToTexture = *const fn(*CommandEncoder, *const TexelCopyTextureInfo, *const TexelCopyTextureInfo, *const Extent3D) callconv(.c) void;
-    pub const Finish = *const fn(*CommandEncoder, ?*const CommandBufferDescriptor) callconv(.c) ?*CommandBuffer;
-    pub const InsertDebugMarker = *const fn(*CommandEncoder, StringView) callconv(.c) void;
-    pub const PopDebugGroup = *const fn(*CommandEncoder) callconv(.c) void;
-    pub const PushDebugGroup = *const fn(*CommandEncoder, StringView) callconv(.c) void;
-    pub const ResolveQuerySet = *const fn(*CommandEncoder, *QuerySet, u32, u32, *Buffer, u64) callconv(.c) void;
-    pub const SetLabel = *const fn(*CommandEncoder, StringView) callconv(.c) void;
-    pub const WriteTimestamp = *const fn(*CommandEncoder, *QuerySet, u32) callconv(.c) void;
-    pub const AddRef = *const fn(*CommandEncoder) callconv(.c) void;
-    pub const Release = *const fn(*CommandEncoder) callconv(.c) void;
+    pub const BeginComputePass = *const fn (*CommandEncoder, ?*const ComputePassDescriptor) callconv(.c) ?*ComputePassEncoder;
+    pub const BeginRenderPass = *const fn (*CommandEncoder, *const RenderPassDescriptor) callconv(.c) ?*RenderPassEncoder;
+    pub const ClearBuffer = *const fn (*CommandEncoder, *Buffer, u64, u64) callconv(.c) void;
+    pub const CopyBufferToBuffer = *const fn (*CommandEncoder, *Buffer, u64, *Buffer, u64, u64) callconv(.c) void;
+    pub const CopyBufferToTexture = *const fn (*CommandEncoder, *const TexelCopyBufferInfo, *const TexelCopyTextureInfo, *const Extent3D) callconv(.c) void;
+    pub const CopyTextureToBuffer = *const fn (*CommandEncoder, *const TexelCopyTextureInfo, *const TexelCopyBufferInfo, *const Extent3D) callconv(.c) void;
+    pub const CopyTextureToTexture = *const fn (*CommandEncoder, *const TexelCopyTextureInfo, *const TexelCopyTextureInfo, *const Extent3D) callconv(.c) void;
+    pub const Finish = *const fn (*CommandEncoder, ?*const CommandBufferDescriptor) callconv(.c) ?*CommandBuffer;
+    pub const InsertDebugMarker = *const fn (*CommandEncoder, StringView) callconv(.c) void;
+    pub const PopDebugGroup = *const fn (*CommandEncoder) callconv(.c) void;
+    pub const PushDebugGroup = *const fn (*CommandEncoder, StringView) callconv(.c) void;
+    pub const ResolveQuerySet = *const fn (*CommandEncoder, *QuerySet, u32, u32, *Buffer, u64) callconv(.c) void;
+    pub const SetLabel = *const fn (*CommandEncoder, StringView) callconv(.c) void;
+    pub const WriteTimestamp = *const fn (*CommandEncoder, *QuerySet, u32) callconv(.c) void;
+    pub const AddRef = *const fn (*CommandEncoder) callconv(.c) void;
+    pub const Release = *const fn (*CommandEncoder) callconv(.c) void;
 };
 
 extern fn wgpuCommandEncoderBeginComputePass(command_encoder: *CommandEncoder, descriptor: ?*const ComputePassDescriptor) ?*ComputePassEncoder;

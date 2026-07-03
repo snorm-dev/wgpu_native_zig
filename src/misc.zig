@@ -12,14 +12,18 @@ pub const WGPUFlags = u64;
 // Status code returned (synchronously) from many operations.
 // Generally indicates an invalid input like an unknown enum value or OutStructChainError.
 pub const Status = enum(u32) {
+    // zig fmt: off
     success  = 0x00000001,
     @"error" = 0x00000002,
+    // zig fmt: on
 };
 
 pub const OptionalBool = enum(u32) {
+    // zig fmt: off
     false        = 0x00000000,
     true         = 0x00000001,
     @"undefined" = 0x00000002,
+    // zig fmt: on
 };
 
 // Used by both device and adapter
@@ -27,6 +31,7 @@ pub const OptionalBool = enum(u32) {
 // but idk if they should go in device.zig, adapter.zig, or their own separate file.
 // So they're going in the "miscellaneous" pile for now.
 pub const FeatureName = enum(u32) {
+    // zig fmt: off
     @"undefined"                                                  = 0x00000000,
     depth_clip_control                                            = 0x00000001,
     depth32_float_stencil8                                        = 0x00000002,
@@ -75,10 +80,11 @@ pub const FeatureName = enum(u32) {
     subgroup_barrier                                              = 0x00030023,
     timestamp_query_inside_encoders                               = 0x00030024,
     timestamp_query_inside_passes                                 = 0x00030025,
+    // zig fmt: on
 };
 
 pub const SupportedFeaturesProcs = struct {
-    pub const FreeMembers = *const fn(SupportedFeatures) callconv(.c) void;
+    pub const FreeMembers = *const fn (SupportedFeatures) callconv(.c) void;
 };
 
 extern fn wgpuSupportedFeaturesFreeMembers(supported_features: SupportedFeatures) void;
@@ -94,12 +100,15 @@ pub const SupportedFeatures = extern struct {
 };
 
 pub const IndexFormat = enum(u32) {
+    // zig fmt: off
     @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
     uint16       = 0x00000001,
     uint32       = 0x00000002,
+    // zig fmt: on
 };
 
 pub const CompareFunction = enum(u32) {
+    // zig fmt: off
     @"undefined"  = 0x00000000, // Indicates no value is passed for this argument
     never         = 0x00000001,
     less          = 0x00000002,
@@ -109,6 +118,7 @@ pub const CompareFunction = enum(u32) {
     not_equal     = 0x00000006,
     greater_equal = 0x00000007,
     always        = 0x00000008,
+    // zig fmt: on
 };
 
 extern fn wgpuGetVersion() u32;
@@ -142,7 +152,7 @@ pub const StringView = extern struct {
     length: usize = WGPU_STRLEN,
 
     pub inline fn fromSlice(slice: []const u8) StringView {
-        return StringView {
+        return StringView{
             .data = slice.ptr,
             .length = slice.len,
         };
@@ -165,7 +175,7 @@ pub const StringView = extern struct {
 
 test "StringView can be constructed from slice" {
     const test_slice = "test";
-    try std.testing.expectEqualDeep(StringView {
+    try std.testing.expectEqualDeep(StringView{
         .data = test_slice.ptr,
         .length = test_slice.len,
     }, StringView.fromSlice("test"));
@@ -173,7 +183,7 @@ test "StringView can be constructed from slice" {
 
 test "slice can be constructed from normal StringView" {
     const test_slice = "test";
-    const sv = StringView {
+    const sv = StringView{
         .data = test_slice.ptr,
         .length = test_slice.len,
     };
@@ -183,7 +193,7 @@ test "slice can be constructed from normal StringView" {
 
 test "slice can be constructed from null-terminated StringView" {
     const test_slice = "test";
-    const sv = StringView {
+    const sv = StringView{
         .data = test_slice.ptr,
         .length = WGPU_STRLEN,
     };
@@ -192,7 +202,7 @@ test "slice can be constructed from null-terminated StringView" {
 }
 
 test "StringView.toSlice returns null if data is null" {
-    const sv = StringView {
+    const sv = StringView{
         .data = null,
         .length = WGPU_STRLEN,
     };

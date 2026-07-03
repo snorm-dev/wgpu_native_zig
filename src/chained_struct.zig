@@ -1,4 +1,5 @@
 pub const SType = enum(u32) {
+    // zig fmt: off
     shader_source_spirv                  = 0x00000001,
     shader_source_wgsl                   = 0x00000002,
     render_pass_max_draw_count           = 0x00000003,
@@ -19,6 +20,7 @@ pub const SType = enum(u32) {
     bind_group_layout_entry_extras       = 0x00030008,
     query_set_descriptor_extras          = 0x00030009,
     surface_configuration_extras         = 0x0003000A,
+    // zig fmt: on
 };
 
 pub const ChainedStruct = extern struct {
