@@ -10,7 +10,7 @@ pub const SamplerBindingType = enum(u32) {
     binding_not_used = 0x00000000,
 
     // Indicates no value is passed for this argument.
-    @"undefined"     = 0x00000001,
+    undefined        = 0x00000001,
 
     filtering        = 0x00000002,
     non_filtering    = 0x00000003,
@@ -25,7 +25,7 @@ pub const SamplerBindingLayout = extern struct {
 
 pub const AddressMode = enum(u32) {
     // zig fmt: off
-    @"undefined"  = 0x00000000, // Indicates no value is passed for this argument
+    undefined     = 0x00000000, // Indicates no value is passed for this argument
     clamp_to_edge = 0x00000001,
     repeat        = 0x00000002,
     mirror_repeat = 0x00000003,
@@ -34,17 +34,17 @@ pub const AddressMode = enum(u32) {
 
 pub const FilterMode = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
-    nearest      = 0x00000001,
-    linear       = 0x00000002,
+    undefined = 0x00000000, // Indicates no value is passed for this argument.
+    nearest   = 0x00000001,
+    linear    = 0x00000002,
     // zig fmt: on
 };
 
 pub const MipmapFilterMode = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
-    nearest      = 0x00000001,
-    linear       = 0x00000002,
+    undefined = 0x00000000, // Indicates no value is passed for this argument.
+    nearest   = 0x00000001,
+    linear    = 0x00000002,
     // zig fmt: on
 };
 

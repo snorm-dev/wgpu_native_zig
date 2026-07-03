@@ -20,9 +20,9 @@ pub const Status = enum(u32) {
 
 pub const OptionalBool = enum(u32) {
     // zig fmt: off
-    false        = 0x00000000,
-    true         = 0x00000001,
-    @"undefined" = 0x00000002,
+    false     = 0x00000000,
+    true      = 0x00000001,
+    undefined = 0x00000002,
     // zig fmt: on
 };
 
@@ -32,7 +32,7 @@ pub const OptionalBool = enum(u32) {
 // So they're going in the "miscellaneous" pile for now.
 pub const FeatureName = enum(u32) {
     // zig fmt: off
-    @"undefined"                                                  = 0x00000000,
+    undefined                                                     = 0x00000000,
     depth_clip_control                                            = 0x00000001,
     depth32_float_stencil8                                        = 0x00000002,
     timestamp_query                                               = 0x00000003,
@@ -101,15 +101,15 @@ pub const SupportedFeatures = extern struct {
 
 pub const IndexFormat = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
-    uint16       = 0x00000001,
-    uint32       = 0x00000002,
+    undefined = 0x00000000, // Indicates no value is passed for this argument.
+    uint16    = 0x00000001,
+    uint32    = 0x00000002,
     // zig fmt: on
 };
 
 pub const CompareFunction = enum(u32) {
     // zig fmt: off
-    @"undefined"  = 0x00000000, // Indicates no value is passed for this argument
+    undefined     = 0x00000000, // Indicates no value is passed for this argument
     never         = 0x00000001,
     less          = 0x00000002,
     equal         = 0x00000003,

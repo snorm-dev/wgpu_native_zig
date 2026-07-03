@@ -56,9 +56,9 @@ pub const InstanceFlags = struct {
 
 pub const Dx12Compiler = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000,
-    fxc          = 0x00000001,
-    dxc          = 0x00000002,
+    undefined = 0x00000000,
+    fxc       = 0x00000001,
+    dxc       = 0x00000002,
     // zig fmt: on
 };
 

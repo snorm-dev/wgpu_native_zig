@@ -31,9 +31,9 @@ const Future = _async.Future;
 
 pub const PowerPreference = enum(u32) {
     // zig fmt: off
-    @"undefined"        = 0x00000000, // No preference.
-    low_power           = 0x00000001,
-    high_performance    = 0x00000002,
+    undefined        = 0x00000000, // No preference.
+    low_power        = 0x00000001,
+    high_performance = 0x00000002,
     // zig fmt: on
 };
 
@@ -48,15 +48,15 @@ pub const AdapterType = enum(u32) {
 
 pub const BackendType = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument
-    null         = 0x00000001,
-    webgpu       = 0x00000002,
-    d3d11        = 0x00000003,
-    d3d12        = 0x00000004,
-    metal        = 0x00000005,
-    vulkan       = 0x00000006,
-    opengl       = 0x00000007,
-    opengl_es    = 0x00000008,
+    undefined = 0x00000000, // Indicates no value is passed for this argument
+    null      = 0x00000001,
+    webgpu    = 0x00000002,
+    d3d11     = 0x00000003,
+    d3d12     = 0x00000004,
+    metal     = 0x00000005,
+    vulkan    = 0x00000006,
+    opengl    = 0x00000007,
+    opengl_es = 0x00000008,
     // zig fmt: on
 };
 

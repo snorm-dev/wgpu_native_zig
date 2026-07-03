@@ -162,7 +162,7 @@ pub const ComputePipeline = opaque {
 pub const VertexStepMode = enum(u32) {
     // zig fmt: off
     vertex_buffer_not_used = 0x00000000, // This VertexBufferLayout is a "hole" in the VertexState `buffers` array.
-    @"undefined"           = 0x00000001, // Indicates no value is passed for this argument.
+    undefined              = 0x00000001, // Indicates no value is passed for this argument.
     vertex                 = 0x00000002,
     instance               = 0x00000003,
     // zig fmt: on
@@ -243,7 +243,7 @@ pub const VertexState = extern struct {
 
 pub const PrimitiveTopology = enum(u32) {
     // zig fmt: off
-    @"undefined"   = 0x00000000, // Indicates no value is passed for this argument.
+    undefined      = 0x00000000, // Indicates no value is passed for this argument.
     point_list     = 0x00000001,
     line_list      = 0x00000002,
     line_strip     = 0x00000003,
@@ -254,18 +254,18 @@ pub const PrimitiveTopology = enum(u32) {
 
 pub const FrontFace = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
-    ccw          = 0x00000001,
-    cw           = 0x00000002,
+    undefined = 0x00000000, // Indicates no value is passed for this argument.
+    ccw       = 0x00000001,
+    cw        = 0x00000002,
     // zig fmt: on
 };
 
 pub const CullMode = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument
-    none         = 0x00000001,
-    front        = 0x00000002,
-    back         = 0x00000003,
+    undefined = 0x00000000, // Indicates no value is passed for this argument
+    none      = 0x00000001,
+    front     = 0x00000002,
+    back      = 0x00000003,
     // zig fmt: on
 };
 
@@ -280,7 +280,7 @@ pub const PrimitiveState = extern struct {
 
 pub const StencilOperation = enum(u32) {
     // zig fmt: off
-    @"undefined"    = 0x00000000, // Indicates no value is passed for this argument.
+    undefined       = 0x00000000, // Indicates no value is passed for this argument.
     keep            = 0x00000001,
     zero            = 0x00000002,
     replace         = 0x00000003,
@@ -322,7 +322,7 @@ pub const MultisampleState = extern struct {
 
 pub const BlendOperation = enum(u32) {
     // zig fmt: off
-    @"undefined"     = 0x00000000, // Indicates no value is passed for this argument
+    undefined        = 0x00000000, // Indicates no value is passed for this argument
     add              = 0x00000001,
     subtract         = 0x00000002,
     reverse_subtract = 0x00000003,
@@ -333,7 +333,7 @@ pub const BlendOperation = enum(u32) {
 
 pub const BlendFactor = enum(u32) {
     // zig fmt: off
-    @"undefined"          = 0x00000000, // Indicates no value is passed for this argument
+    undefined             = 0x00000000, // Indicates no value is passed for this argument
     zero                  = 0x00000001,
     one                   = 0x00000002,
     src                   = 0x00000003,
@@ -410,7 +410,7 @@ pub const ColorWriteMasks = struct {
 pub const ColorTargetState = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
 
-    // The texture format of the target. If TextureFormat.@"undefined",
+    // The texture format of the target. If TextureFormat.undefined,
     // indicates a "hole" in the parent FragmentState `targets` array:
     // the pipeline does not output a value at this `location`.
     format: TextureFormat,

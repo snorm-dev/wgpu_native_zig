@@ -15,7 +15,7 @@ const ChainedStruct = @import("chained_struct.zig").ChainedStruct;
 pub const BufferBindingType = enum(u32) {
     // zig fmt: off
     binding_not_used  = 0x00000000, // Indicates that this BufferBindingLayout member of its parent BindGroupLayoutEntry is not used.
-    @"undefined"      = 0x00000001, // Indicates no value is passed for this argument
+    undefined         = 0x00000001, // Indicates no value is passed for this argument
     uniform           = 0x00000002,
     storage           = 0x00000003,
     read_only_storage = 0x00000004,

@@ -209,7 +209,7 @@ pub const CompositeAlphaMode = enum(u32) {
 pub const PresentMode = enum(u32) {
     // zig fmt: off
     // Present mode is not specified. Use the default.
-    @"undefined" = 0x00000000,
+    undefined    = 0x00000000,
 
     // The presentation of the image to the user waits for the next vertical blanking period to update in a first-in, first-out manner.
     // Tearing cannot be observed and frame-loop will be limited to the display's refresh rate.

@@ -8,7 +8,7 @@ pub const SType = enum(u32) {
     surface_source_xlib_window           = 0x00000006,
     surface_source_wayland_surface       = 0x00000007,
     surface_source_android_native_window = 0x00000008,
-    surface_source_xcb_window            = 0x00000009, 
+    surface_source_xcb_window            = 0x00000009,
 
     // wgpu-native extras (wgpu.h)
     device_extras                        = 0x00030001,

@@ -143,17 +143,17 @@ pub const ComputePassEncoder = opaque {
 
 pub const LoadOp = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
-    load         = 0x00000001,
-    clear        = 0x00000002,
+    undefined = 0x00000000, // Indicates no value is passed for this argument.
+    load      = 0x00000001,
+    clear     = 0x00000002,
     // zig fmt: on
 };
 
 pub const StoreOp = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument
-    store        = 0x00000001,
-    discard      = 0x00000002,
+    undefined = 0x00000000, // Indicates no value is passed for this argument
+    store     = 0x00000001,
+    discard   = 0x00000002,
     // zig fmt: on
 };
 

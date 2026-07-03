@@ -14,7 +14,7 @@ const Buffer = @import("buffer.zig").Buffer;
 
 pub const TextureFormat = enum(u32) {
     // zig fmt: off
-    @"undefined"            = 0x00000000, // Indicates no value is passed for this argument.
+    undefined               = 0x00000000, // Indicates no value is passed for this argument.
     r8_unorm                = 0x00000001,
     r8_snorm                = 0x00000002,
     r8_uint                 = 0x00000003,
@@ -139,7 +139,7 @@ pub const TextureUsages = struct {
 //       it "Aspect" seems like it'd confuse people thinking it is an aspect ratio or something, but should it just be "Aspect"?
 pub const TextureAspect = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
+    undefined    = 0x00000000, // Indicates no value is passed for this argument.
     all          = 0x00000001,
     stencil_only = 0x00000002,
     depth_only   = 0x00000003,
@@ -191,7 +191,7 @@ pub const SampleType = enum(u32) {
     binding_not_used   = 0x00000000,
 
     // Indicates no value is passed for this argument.
-    @"undefined"       = 0x00000001,
+    undefined          = 0x00000001,
 
     float              = 0x00000002,
     unfilterable_float = 0x00000003,
@@ -203,7 +203,7 @@ pub const SampleType = enum(u32) {
 
 pub const ViewDimension = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
+    undefined    = 0x00000000, // Indicates no value is passed for this argument.
     @"1d"        = 0x00000001,
     @"2d"        = 0x00000002,
     @"2d_array"  = 0x00000003,
@@ -226,7 +226,7 @@ pub const StorageTextureAccess = enum(u32) {
     binding_not_used = 0x00000000,
 
     // Indicates no value is passed for this argument.
-    @"undefined"     = 0x00000001,
+    undefined        = 0x00000001,
 
     write_only       = 0x00000002,
     read_only        = 0x00000003,
@@ -243,7 +243,7 @@ pub const StorageTextureBindingLayout = extern struct {
 
 pub const TextureDimension = enum(u32) {
     // zig fmt: off
-    @"undefined" = 0x00000000, // Indicates no value is passed for this argument.
+    undefined    = 0x00000000, // Indicates no value is passed for this argument.
     @"1d"        = 0x00000001,
     @"2d"        = 0x00000002,
     @"3d"        = 0x00000003,
