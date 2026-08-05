@@ -2,6 +2,7 @@ const _misc = @import("misc.zig");
 const WGPUBool = _misc.WGPUBool;
 const IndexFormat = _misc.IndexFormat;
 const StringView = _misc.StringView;
+const Slice = _misc.Slice;
 
 const ChainedStruct = @import("chained_struct.zig").ChainedStruct;
 const TextureFormat = @import("texture.zig").TextureFormat;
@@ -13,8 +14,7 @@ const ShaderStage = @import("shader.zig").ShaderStage;
 pub const RenderBundleEncoderDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     label: StringView = StringView{},
-    color_format_count: usize,
-    color_formats: [*]const TextureFormat,
+    color_formats: Slice(TextureFormat, .count_first),
     depth_stencil_format: TextureFormat = TextureFormat.undefined,
     sample_count: u32 = 1,
     depth_read_only: WGPUBool = @intFromBool(false),
@@ -87,7 +87,8 @@ pub const RenderBundleEncoder = opaque {
     pub inline fn pushDebugGroup(self: *RenderBundleEncoder, group_label: []const u8) void {
         wgpuRenderBundleEncoderPushDebugGroup(self, StringView.fromSlice(group_label));
     }
-    pub inline fn setBindGroup(self: *RenderBundleEncoder, group_index: u32, group: *BindGroup, dynamic_offset_count: usize, dynamic_offsets: ?[*]const u32) void {
+    pub inline fn setBindGroup(self: *RenderBundleEncoder, group_index: u32, group: *BindGroup, dynamic_offsets: ?[]const u32) void {
+        const dynamic_offset_count = if (dynamic_offsets) |d| d.len else 0;
         wgpuRenderBundleEncoderSetBindGroup(self, group_index, group, dynamic_offset_count, dynamic_offsets);
     }
     pub inline fn setIndexBuffer(self: *RenderBundleEncoder, buffer: *Buffer, format: IndexFormat, offset: u64, size: u64) void {

@@ -19,6 +19,7 @@ const _misc = @import("misc.zig");
 const WGPUBool = _misc.WGPUBool;
 const StringView = _misc.StringView;
 const Status = _misc.Status;
+const Slice = _misc.Slice;
 
 // The root descriptor for the creation of an Surface with Instance.createSurface().
 // It isn't sufficient by itself and must have one of the *SurfaceSource in its chain.
@@ -259,8 +260,7 @@ pub const SurfaceConfiguration = extern struct {
     height: u32,
 
     // The additional TextureFormat for TextureView format reinterpretation of the surface's textures.
-    view_format_count: usize = 0,
-    view_formats: [*]const TextureFormat = &[0]TextureFormat{},
+    view_formats: Slice(TextureFormat, .count_first) = .none,
 
     // How the surface's frames will be composited on the screen.
     alpha_mode: CompositeAlphaMode = CompositeAlphaMode.auto,
@@ -292,18 +292,15 @@ pub const SurfaceCapabilities = extern struct {
     usages: TextureUsage,
 
     // A list of supported TextureFormat values, in order of preference.
-    format_count: usize,
-    formats: [*]const TextureFormat,
+    formats: Slice(TextureFormat, .count_first),
 
     // A list of supported PresentMode values.
     // Guaranteed to contain PresentMode.fifo.
-    present_mode_count: usize,
-    present_modes: [*]const PresentMode,
+    present_modes: Slice(PresentMode, .count_first),
 
     // A list of supported CompositeAlphaMode values.
     // CompositeAlphaMode.auto will be an alias for the first element and will never be present in this array.
-    alpha_mode_count: usize,
-    alpha_modes: [*]const CompositeAlphaMode,
+    alpha_modes: Slice(CompositeAlphaMode, .count_first),
 
     // Frees array members of SurfaceCapabilities which were allocated by the API.
     pub inline fn freeMembers(self: SurfaceCapabilities) void {

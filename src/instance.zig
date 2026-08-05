@@ -23,6 +23,7 @@ const WGPUFlags = _misc.WGPUFlags;
 const WGPUBool = _misc.WGPUBool;
 const StringView = _misc.StringView;
 const Status = _misc.Status;
+const Slice = _misc.Slice;
 
 const _async = @import("async.zig");
 const Future = _async.Future;
@@ -141,8 +142,7 @@ pub const SupportedWGSLLanguageFeaturesProcs = struct {
 extern fn wgpuSupportedWGSLLanguageFeaturesFreeMembers(supported_wgsl_language_features: SupportedWGSLLanguageFeatures) void;
 
 pub const SupportedWGSLLanguageFeatures = extern struct {
-    feature_count: usize,
-    features: [*]const WGSLLanguageFeatureName,
+    features: Slice(WGSLLanguageFeatureName, .count_first),
 
     // Unimplemented as of wgpu-native v25.0.2.1,
     // see https://github.com/gfx-rs/wgpu-native/blob/d8238888998db26ceab41942f269da0fa32b890c/src/unimplemented.rs#L193

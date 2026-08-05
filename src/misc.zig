@@ -26,6 +26,37 @@ pub const OptionalBool = enum(u32) {
     // zig fmt: on
 };
 
+pub fn Slice(comptime T: type, comptime order: enum { count_first, count_last }) type {
+    return switch (order) {
+        .count_first => extern struct {
+            count: usize = 0,
+            values: ?[*]const T = null,
+
+            const Self = @This();
+            pub const none: Self = .{};
+            pub fn fromZigSlice(slice: []const T) Self {
+                return .{
+                    .count = slice.len,
+                    .values = slice.ptr,
+                };
+            }
+        },
+        .count_last => extern struct {
+            values: ?[*]const T = null,
+            count: usize = 0,
+
+            const Self = @This();
+            pub const none: Self = .{};
+            pub fn fromZigSlice(slice: []const T) Self {
+                return .{
+                    .values = slice.ptr,
+                    .count = slice.len,
+                };
+            }
+        },
+    };
+}
+
 // Used by both device and adapter
 // FeatureName and Limits are clearly related
 // but idk if they should go in device.zig, adapter.zig, or their own separate file.

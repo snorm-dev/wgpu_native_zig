@@ -7,6 +7,7 @@ const PipelineLayout = @import("pipeline.zig").PipelineLayout;
 const _misc = @import("misc.zig");
 const WGPUFlags = _misc.WGPUFlags;
 const StringView = _misc.StringView;
+const Slice = _misc.Slice;
 
 const _async = @import("async.zig");
 const CallbackMode = _async.CallbackMode;
@@ -89,15 +90,13 @@ pub const ShaderSourceGLSL = extern struct {
     },
     stage: ShaderStage,
     code: StringView,
-    define_count: u32 = 0,
-    defines: ?[*]ShaderDefine = null,
+    defines: Slice(ShaderDefine, .count_first) = .none,
 };
 pub const ShaderModuleGLSLMergedDescriptor = struct {
     label: []const u8 = "",
     stage: ShaderStage,
     code: []const u8,
-    define_count: u32 = 0,
-    defines: ?[*]ShaderDefine = null,
+    defines: Slice(ShaderDefine, .count_first) = .none,
 };
 pub inline fn shaderModuleGLSLDescriptor(
     descriptor: ShaderModuleGLSLMergedDescriptor,
@@ -106,7 +105,6 @@ pub inline fn shaderModuleGLSLDescriptor(
         .next_in_chain = @ptrCast(&ShaderSourceGLSL{
             .stage = descriptor.stage,
             .code = StringView.fromSlice(descriptor.code),
-            .define_count = descriptor.define_count,
             .defines = descriptor.defines,
         }),
         .label = StringView.fromSlice(descriptor.label),
@@ -152,8 +150,7 @@ pub const CompilationMessage = extern struct {
 
 pub const CompilationInfo = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
-    message_count: usize,
-    messages: [*]const CompilationMessage,
+    messages: Slice(CompilationMessage, .count_first),
 };
 
 pub const CompilationInfoCallback = *const fn (status: CompilationInfoRequestStatus, compilationInfo: ?*const CompilationInfo, userdata1: ?*anyopaque, userdata2: ?*anyopaque) callconv(.c) void;

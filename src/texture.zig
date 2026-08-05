@@ -4,6 +4,7 @@ const _misc = @import("misc.zig");
 const WGPUFlags = _misc.WGPUFlags;
 const WGPUBool = _misc.WGPUBool;
 const StringView = _misc.StringView;
+const Slice = _misc.Slice;
 const U32_MAX = _misc.U32_MAX;
 
 pub const WGPU_ARRAY_LAYER_COUNT_UNDEFINED = U32_MAX;
@@ -265,8 +266,7 @@ pub const TextureDescriptor = extern struct {
     format: TextureFormat,
     mip_level_count: u32 = 1,
     sample_count: u32 = 1,
-    view_format_count: usize = 0,
-    view_formats: [*]const TextureFormat = &[_]TextureFormat{},
+    view_formats: Slice(TextureFormat, .count_first) = .none,
 };
 
 pub const TextureProcs = struct {

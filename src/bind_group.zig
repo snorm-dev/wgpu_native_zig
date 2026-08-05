@@ -24,6 +24,7 @@ const ShaderStage = @import("shader.zig").ShaderStage;
 const _misc = @import("misc.zig");
 const WGPU_WHOLE_SIZE = _misc.WGPU_WHOLE_SIZE;
 const StringView = _misc.StringView;
+const Slice = _misc.Slice;
 
 pub const BindGroupLayoutEntryExtras = extern struct {
     chain: ChainedStruct = ChainedStruct{
@@ -63,8 +64,7 @@ pub const BindGroupLayoutEntry = extern struct {
 pub const BindGroupLayoutDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     label: StringView = StringView{},
-    entry_count: usize,
-    entries: [*]const BindGroupLayoutEntry,
+    entries: Slice(BindGroupLayoutEntry, .count_first),
 };
 
 pub const BindGroupLayoutProcs = struct {
@@ -96,12 +96,9 @@ pub const BindGroupEntryExtras = extern struct {
     chain: ChainedStruct = ChainedStruct{
         .s_type = SType.bind_group_entry_extras,
     },
-    buffers: ?[*]const *Buffer,
-    buffer_count: usize = 0,
-    samplers: ?[*]const *Sampler,
-    sampler_count: usize = 0,
-    texture_views: ?[*]const *TextureView,
-    texture_view_count: usize = 0,
+    buffers: Slice(*Buffer, .count_last) = .none,
+    samplers: Slice(*Sampler, .count_last) = .none,
+    texture_views: Slice(*TextureView, .count_last) = .none,
 };
 
 pub const BindGroupEntry = extern struct {
@@ -124,8 +121,7 @@ pub const BindGroupDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     label: StringView = StringView{},
     layout: *BindGroupLayout,
-    entry_count: usize,
-    entries: [*]const BindGroupEntry,
+    entries: Slice(BindGroupEntry, .count_first),
 };
 
 pub const BindGroupProcs = struct {

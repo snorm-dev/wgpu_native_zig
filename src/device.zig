@@ -10,6 +10,7 @@ const FeatureName = _misc.FeatureName;
 const StringView = _misc.StringView;
 const Status = _misc.Status;
 const SupportedFeatures = _misc.SupportedFeatures;
+const Slice = _misc.Slice;
 
 const _async = @import("async.zig");
 const CallbackMode = _async.CallbackMode;
@@ -144,8 +145,7 @@ pub const UncapturedErrorCallbackInfo = extern struct {
 pub const DeviceDescriptor = extern struct {
     next_in_chain: ?*const ChainedStruct = null,
     label: StringView = StringView{},
-    required_feature_count: usize = 0,
-    required_features: [*]const FeatureName = &[0]FeatureName{},
+    required_features: Slice(FeatureName, .count_first) = .none,
     required_limits: ?*const Limits,
     default_queue: QueueDescriptor = QueueDescriptor{},
     device_lost_callback_info: DeviceLostCallbackInfo = DeviceLostCallbackInfo{},
